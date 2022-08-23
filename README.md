@@ -74,7 +74,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Chris Perrins** - *Initial work* - [christophperrins](https://github.com/christophperrins)
+* **Kishan Kunvardia** - *Project Work* - [kishankunvardia](https://github.com/kishankunvardia)
 
 ## License
 
