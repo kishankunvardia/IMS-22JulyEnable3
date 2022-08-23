@@ -139,5 +139,7 @@ public class CustomerDAO implements Dao<Customer> {
 		}
 		return 0;
 	}
+	
+	//Customer can be created, viewed, updated and deleted
 
 }
