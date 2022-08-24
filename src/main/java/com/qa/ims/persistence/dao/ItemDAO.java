@@ -18,14 +18,6 @@ import com.qa.ims.utils.DBUtils;
 public class ItemDAO implements Dao<Item>{
 	
 	public static final Logger LOGGER = LogManager.getLogger();
-	
-	public Item modelFromResultSetItem(ResultSet resultSet) throws SQLException {
-		Long id = resultSet.getLong("id");
-		String itemName = resultSet.getString("item_name");
-		float price = resultSet.getFloat("price");
-		Long stockLevel = resultSet.getLong("stock_level");
-		return new Item(id, itemName, price, stockLevel);
-	}
 
 	@Override
 	public List<Item> readAll() {
@@ -34,7 +26,7 @@ public class ItemDAO implements Dao<Item>{
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM items");) {
 			List<Item> items = new ArrayList<>();
 			while (resultSet.next()) {
-				items.add(modelFromResultSetItem(resultSet));
+				items.add(modelFromResultSet(resultSet));
 			}
 			return items;
 		} catch (SQLException e) {
@@ -49,7 +41,7 @@ public class ItemDAO implements Dao<Item>{
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY id DESC LIMIT 1");) {
 			resultSet.next();
-			return modelFromResultSetItem(resultSet);
+			return modelFromResultSet(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
@@ -59,7 +51,17 @@ public class ItemDAO implements Dao<Item>{
 
 	@Override
 	public Item read(Long id) {
-		// TODO Auto-generated method stub
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM items WHERE id = ?");) {
+			statement.setLong(1, id);
+			try (ResultSet resultSet = statement.executeQuery();) {
+				resultSet.next();
+				return modelFromResultSet(resultSet);
+			}
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
@@ -82,8 +84,20 @@ public class ItemDAO implements Dao<Item>{
 	}
 
 	@Override
-	public Item update(Item t) {
-		// TODO Auto-generated method stub
+	public Item update(Item item) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection
+						.prepareStatement("UPDATE items SET item_name = ?, price = ?, stock_level = ? WHERE id = ?;");) {
+			statement.setString(1, item.getItemName());
+			statement.setFloat(2, item.getPrice());
+			statement.setLong(3, item.getStockLevel());
+			statement.setLong(4, item.getId());
+			statement.executeUpdate();
+			return read(item.getId());
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
@@ -95,8 +109,11 @@ public class ItemDAO implements Dao<Item>{
 
 	@Override
 	public Item modelFromResultSet(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Long id = resultSet.getLong("id");
+		String itemName = resultSet.getString("item_name");
+		float price = resultSet.getFloat("price");
+		Long stockLevel = resultSet.getLong("stock_level");
+		return new Item(id, itemName, price, stockLevel);
 	}
 
 }
