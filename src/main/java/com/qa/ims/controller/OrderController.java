@@ -47,7 +47,7 @@ public static final Logger LOGGER = LogManager.getLogger();
 		while (add.equals("yes")) {
 			LOGGER.info("Please enter the item id of the item you would like to order");
 			long itemIDAdd = utils.getLong();
-			OrderItem orderItemAdd = orderDAO.addItem(new OrderItem(order.getId(), itemID));
+			OrderItem orderItemAdd = orderDAO.addItem(new OrderItem(order.getId(), itemIDAdd));
 			LOGGER.info("Would you like to add another item, yes or no?");
 			add = utils.getString();
 		}

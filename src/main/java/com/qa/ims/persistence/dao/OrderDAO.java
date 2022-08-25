@@ -43,6 +43,19 @@ public class OrderDAO implements Dao<Order>{
 		}
 		return null;
 	}
+	
+	public OrderItem readLatestOrderItem() {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM orderitem ORDER BY id DESC LIMIT 1");) {
+			resultSet.next();
+			return modelFromResultSetOrderItem(resultSet);
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
 
 	@Override
 	public Order create(Order order) {
@@ -61,6 +74,18 @@ public class OrderDAO implements Dao<Order>{
 	}
 	
 	public OrderItem addItem(OrderItem orderitem) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection
+						.prepareStatement("INSERT INTO orderitem (order_id, item_id) VALUES (?, ?);");) {
+			statement.setLong(1, orderitem.getOrderID());
+			statement.setLong(2, orderitem.getItemID());
+			statement.executeUpdate();
+			return readLatestOrderItem();
+		}
+		catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return null;
 	}
 
@@ -82,6 +107,14 @@ public class OrderDAO implements Dao<Order>{
 		Long customerID = resultSet.getLong("customer_id");
 		float total = resultSet.getFloat("total");
 		return new Order(id, customerID, total);
+	}
+	
+	public OrderItem modelFromResultSetOrderItem(ResultSet resultSet) throws SQLException {
+		Long id = resultSet.getLong("id");
+		Long orderID = resultSet.getLong("order_id");
+		Long itemID = resultSet.getLong("order_id");
+		
+		return new OrderItem(id, orderID, itemID);
 	}
 
 }
