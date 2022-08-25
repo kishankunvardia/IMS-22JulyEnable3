@@ -28,7 +28,7 @@ public static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
 	public List<Order> readAll() {
-		// TODO Auto-generated method stub
+		List<Order> orders = orderDAO.readAll();
 		return null;
 	}
 

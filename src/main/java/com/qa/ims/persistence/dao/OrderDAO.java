@@ -5,12 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.persistence.domain.OrderItem;
 import com.qa.ims.utils.DBUtils;
@@ -21,8 +23,29 @@ public class OrderDAO implements Dao<Order>{
 
 	@Override
 	public List<Order> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("SELECT o.id AS 'Order ID' , c.id AS 'Customer ID' , concat(c.first_name, ' ', c.surname) AS 'Name' , i.item_name, i.price\r\n"
+						+ "FROM orderitem oi\r\n"
+						+ "JOIN orders o ON o.id = oi.order_id\r\n"
+						+ "JOIN items i ON i.id = oi.item_id\r\n"
+						+ "JOIN customers c ON c.id = o.customer_id\r\n"
+						+ "ORDER BY o.id;");) {
+			
+			while (resultSet.next()) {
+				Long orderID = resultSet.getLong("Order ID");
+				Long custID = resultSet.getLong("Customer ID");
+				String name = resultSet.getString("Name");
+				String itemName = resultSet.getString("item_name");
+				float price = resultSet.getFloat("price");
+				System.out.println("Order ID:" + orderID + " Customer ID:" + custID + " Name:" + name + " Item:" + itemName + " Price:" + price );
+			}
+			return null;
+		} catch (SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return new ArrayList<>();
 	}
 
 	@Override
