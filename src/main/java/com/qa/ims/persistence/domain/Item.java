@@ -59,26 +59,5 @@ public class Item {
 	public String toString() {
 		return "ID:" + id + " | Item name:" + itemName + " | Price:" + price + " | Stock level:" + stockLevel;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, itemName, price, stockLevel);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Item other = (Item) obj;
-		return Objects.equals(id, other.id) && Objects.equals(itemName, other.itemName)
-				&& Float.floatToIntBits(price) == Float.floatToIntBits(other.price)
-				&& Objects.equals(stockLevel, other.stockLevel);
-	}
-	
-	
 	
 }

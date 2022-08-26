@@ -48,24 +48,5 @@ public class Order {
 		return "Order [id=" + id + ", customerID=" + customerID + ", total=" + total + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(customerID, id, total);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Order other = (Order) obj;
-		return Objects.equals(customerID, other.customerID) && Objects.equals(id, other.id)
-				&& Float.floatToIntBits(total) == Float.floatToIntBits(other.total);
-	}
-	
-	
 
 }

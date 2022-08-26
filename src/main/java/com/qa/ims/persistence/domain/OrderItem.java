@@ -48,25 +48,5 @@ public class OrderItem {
 		return "OrderItem [id=" + id + ", orderID=" + orderID + ", itemID=" + itemID + "]";
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, itemID, orderID);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OrderItem other = (OrderItem) obj;
-		return id == other.id && itemID == other.itemID && orderID == other.orderID;
-	}
-	
-	
-	
-	
 
 }
