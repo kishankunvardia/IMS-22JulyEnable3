@@ -63,8 +63,9 @@ public static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
 	public int delete() {
-		// TODO Auto-generated method stub
-		return 0;
+		LOGGER.info("Please enter the order id of the order to delete");
+		Long id = utils.getLong();
+		return orderDAO.delete(id);
 	}
 
 }
