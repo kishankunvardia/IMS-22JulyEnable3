@@ -4,19 +4,19 @@ CREATE SCHEMA IF NOT EXISTS `ims`;
 
 USE `ims` ;
 
-DROP TABLE IF EXISTS `ims`.`orderitem`;
-DROP TABLE IF EXISTS `ims`.`orders`;
-DROP TABLE IF EXISTS `ims`.`items`;
-DROP TABLE IF EXISTS `ims`.`customers`;
+DROP TABLE `orderitem`;
+DROP TABLE `orders`;
+DROP TABLE `items`;
+DROP TABLE `customers`;
 
-CREATE TABLE IF NOT EXISTS `ims`.`customers` (
+CREATE TABLE IF NOT EXISTS `customers` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(40) DEFAULT NULL,
     `surname` VARCHAR(40) DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `ims`.`items` (
+CREATE TABLE IF NOT EXISTS `items` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `item_name` VARCHAR(100) NOT NULL,
     `price` DEC(6,2) NOT NULL,
@@ -24,19 +24,19 @@ CREATE TABLE IF NOT EXISTS `ims`.`items` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `ims`.`orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `customer_id` INT(11) NOT NULL,
     `total` DEC(6,2) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (customer_id) REFERENCES ims.customers(id)
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
-CREATE TABLE IF NOT EXISTS `ims`.`orderitem` (
+CREATE TABLE IF NOT EXISTS `orderitem` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `order_id` INT(11) NOT NULL,
     `item_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (order_id) REFERENCES ims.orders(id),
-    FOREIGN KEY (item_id) REFERENCES ims.items(id)
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES items(id)
 );
