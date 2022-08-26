@@ -36,7 +36,7 @@ public class CustomerControllerTest {
 
 		Mockito.when(utils.getString()).thenReturn(F_NAME, L_NAME);
 		Mockito.when(dao.create(created)).thenReturn(created);
-
+		
 		assertEquals(created, controller.create());
 
 		Mockito.verify(utils, Mockito.times(2)).getString();
